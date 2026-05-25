@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # MySQL 8
+  mysql:
+    image: mysql:8.0
+    container_name: pzb-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: peizhenbao
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  # Redis
+  redis:
+    image: redis:7.0-alpine
+    container_name: pzb-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+    command: redis-server --appendonly yes --requirepass "pzb_redis_123"
+
+  # RabbitMQ with Management Plugin
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: pzb-rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management UI
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+
+  # MinIO for Local Object Storage
+  minio:
+    image: minio/minio
+    container_name: pzb-minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console
+    volumes:
+      - ./minio/data:/data
+    command: server /data --console-address ":9001"

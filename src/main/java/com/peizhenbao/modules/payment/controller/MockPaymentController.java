@@ -7,6 +7,8 @@ import com.peizhenbao.modules.order.entity.Order;
 import com.peizhenbao.modules.order.mapper.OrderMapper;
 import com.peizhenbao.modules.payment.entity.Payment;
 import com.peizhenbao.modules.payment.mapper.PaymentMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Tag(name = "前台-支付模块", description = "模拟第三方支付回调，用于测试订单流转")
 @Slf4j
 @RestController
 @RequestMapping("/api/payment/mock")
@@ -24,6 +27,7 @@ public class MockPaymentController {
     private final OrderMapper orderMapper;
     private final PaymentMapper paymentMapper;
 
+    @Operation(summary = "模拟微信/支付宝支付成功回调", description = "根据订单号模拟支付成功，生成支付流水并流转订单状态为已支付（该接口具备幂等性处理）")
     @PostMapping("/pay")
     @Transactional(rollbackFor = Exception.class)
     public Result<?> mockPay(@RequestParam String orderNo) {

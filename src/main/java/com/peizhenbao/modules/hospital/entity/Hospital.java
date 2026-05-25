@@ -23,6 +23,8 @@ public class Hospital implements Serializable {
     private String address;
     private BigDecimal longitude;
     private BigDecimal latitude;
+    private String phone;
+    private String image;
     private Integer status; // 0下线 1上线
     private LocalDateTime createdAt;
 }

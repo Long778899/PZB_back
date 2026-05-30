@@ -68,6 +68,33 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
             }
         }
         
+        // Add indices for search optimization
+        try {
+            jdbcTemplate.execute("CREATE INDEX idx_hospitals_name ON hospitals(name)");
+            jdbcTemplate.execute("CREATE INDEX idx_hospitals_city ON hospitals(city)");
+            log.info("Successfully added indexes to hospitals table.");
+        } catch (Exception e) {
+            log.debug("Indexes on hospitals might already exist");
+        }
+
+        try {
+            jdbcTemplate.execute("CREATE INDEX idx_departments_name ON departments(name)");
+            log.info("Successfully added index to departments table.");
+        } catch (Exception e) {
+            log.debug("Index on departments might already exist");
+        }
+
+        try {
+            jdbcTemplate.execute("CREATE INDEX idx_doctors_name ON doctors(name)");
+            jdbcTemplate.execute("CREATE INDEX idx_doctors_hospital_id ON doctors(hospital_id)");
+            jdbcTemplate.execute("CREATE INDEX idx_doctors_department_id ON doctors(department_id)");
+            log.info("Successfully added indexes to doctors table.");
+        } catch (Exception e) {
+            log.debug("Indexes on doctors might already exist");
+        }
+
+        log.info("Database migration completed.");
+        
         try {
             jdbcTemplate.execute("ALTER TABLE hospitals ADD COLUMN level_name VARCHAR(50)");
             log.info("Successfully added 'level_name' column to hospitals table.");

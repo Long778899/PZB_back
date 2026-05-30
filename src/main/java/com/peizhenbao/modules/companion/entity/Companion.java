@@ -21,6 +21,12 @@ public class Companion {
     private BigDecimal score;
     private Integer serviceCount;
     private BigDecimal price;
-    private Integer status; // 0休息 1接单中 2已禁用
+    private Integer status; // 0休息/待审核 1接单中 2已禁用
+    private String idCard;
+    private String drivingLicense;
+    private Integer hasWheelchair; // 0无 1有
+    private Integer isVeteran; // 0否 1是
+    private Integer hasNursingExperience; // 0无 1有
+    private String selfDescription;
     private LocalDateTime createdAt;
 }

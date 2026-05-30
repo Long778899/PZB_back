@@ -32,6 +32,12 @@ public class ConsoleCompanionController {
         companion.setScore(dto.getScore() != null ? dto.getScore() : new java.math.BigDecimal("5.0"));
         companion.setServiceCount(dto.getServiceCount() != null ? dto.getServiceCount() : 0);
         companion.setPrice(dto.getPrice());
+        companion.setIdCard(dto.getIdCard());
+        companion.setDrivingLicense(dto.getDrivingLicense());
+        companion.setHasWheelchair(dto.getHasWheelchair() != null ? dto.getHasWheelchair() : 0);
+        companion.setIsVeteran(dto.getIsVeteran() != null ? dto.getIsVeteran() : 0);
+        companion.setHasNursingExperience(dto.getHasNursingExperience() != null ? dto.getHasNursingExperience() : 0);
+        companion.setSelfDescription(dto.getSelfDescription());
         companion.setStatus(1); // 默认接单中
         companion.setCreatedAt(LocalDateTime.now());
         

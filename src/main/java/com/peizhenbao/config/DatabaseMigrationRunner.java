@@ -99,7 +99,23 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
             jdbcTemplate.execute("ALTER TABLE hospitals ADD COLUMN level_name VARCHAR(50)");
             log.info("Successfully added 'level_name' column to hospitals table.");
         } catch (Exception e) {
-            log.debug("Column 'level_name' might already exist or could not be added");
+            log.debug("Column 'level_name' might already exist in hospitals");
         }
+
+        // Add new companion fields
+        try {
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN id_card VARCHAR(100)");
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN driving_license VARCHAR(100)");
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN has_wheelchair TINYINT DEFAULT 0");
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN is_veteran TINYINT DEFAULT 0");
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN has_nursing_experience TINYINT DEFAULT 0");
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN self_description TEXT");
+            log.info("Successfully added new fields to companions table.");
+        } catch (Exception e) {
+            log.debug("New companion fields might already exist");
+        }
+
+        // Drop singular legacy tables if they exist
+        String[] legacyTables = {"department", "doctor", "hospital"};
     }
 }

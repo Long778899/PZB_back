@@ -32,4 +32,32 @@ public class CompanionController {
     public Result<Companion> getDetail(@PathVariable Long id) {
         return Result.success(companionService.getDetail(id));
     }
+
+    @Operation(summary = "陪诊员自主注册", description = "前台用户申请成为陪诊员，包含资质等扩展信息填写")
+    @PostMapping("/register")
+    public Result<?> register(@org.springframework.validation.annotation.Validated @RequestBody com.peizhenbao.modules.companion.dto.RegisterCompanionDTO dto,
+                              @org.springframework.beans.factory.annotation.Autowired com.peizhenbao.modules.companion.mapper.CompanionMapper companionMapper) {
+        Companion companion = new Companion();
+        companion.setName(dto.getName());
+        companion.setPhone(dto.getPhone());
+        companion.setGender(dto.getGender() != null ? dto.getGender() : 0);
+        
+        companion.setIdCard(dto.getIdCard());
+        companion.setDrivingLicense(dto.getDrivingLicense());
+        companion.setHasWheelchair(dto.getHasWheelchair() != null ? dto.getHasWheelchair() : 0);
+        companion.setIsVeteran(dto.getIsVeteran() != null ? dto.getIsVeteran() : 0);
+        companion.setHasNursingExperience(dto.getHasNursingExperience() != null ? dto.getHasNursingExperience() : 0);
+        companion.setSelfDescription(dto.getSelfDescription());
+        
+        // 自主注册的默认状态为 0 (休息/待审核)
+        companion.setStatus(0);
+        // 初始化一些基础数值
+        companion.setScore(new java.math.BigDecimal("5.0"));
+        companion.setServiceCount(0);
+        companion.setPrice(new java.math.BigDecimal("0.0")); // 等待审核后定价或自己稍后补充
+        companion.setCreatedAt(java.time.LocalDateTime.now());
+        
+        companionMapper.insert(companion);
+        return Result.success();
+    }
 }

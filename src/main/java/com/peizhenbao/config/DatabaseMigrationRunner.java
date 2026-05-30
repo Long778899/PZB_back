@@ -115,6 +115,34 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
             log.debug("New companion fields might already exist");
         }
 
+        // Add order revenue fields
+        try {
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN platform_fee DECIMAL(10,2)");
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN companion_income DECIMAL(10,2)");
+            log.info("Successfully added revenue fields to orders table.");
+        } catch (Exception e) {
+            log.debug("Order revenue fields might already exist");
+        }
+
+        // Create companion wallets table
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS companion_wallets (" +
+                "companion_id BIGINT PRIMARY KEY, " +
+                "balance DECIMAL(10,2) DEFAULT 0.00, " +
+                "frozen_balance DECIMAL(10,2) DEFAULT 0.00, " +
+                "total_revenue DECIMAL(10,2) DEFAULT 0.00, " +
+                "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
+                ")");
+
+        // Create wallet transactions table
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS wallet_transactions (" +
+                "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                "companion_id BIGINT NOT NULL, " +
+                "order_id BIGINT, " +
+                "amount DECIMAL(10,2) NOT NULL, " +
+                "type INT NOT NULL COMMENT '1=订单分润 2=提现支出 3=违规扣款', " +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ")");
+
         // Drop singular legacy tables if they exist
         String[] legacyTables = {"department", "doctor", "hospital"};
     }

@@ -27,6 +27,10 @@ public class Order {
     private BigDecimal amount;
     private Integer payStatus; // 0待支付 1已支付 2已退款
     private Integer orderStatus; // 0待支付 1已支付待接单 2待接单 3已接单 4服务中 5已完成 6已取消 7已退款 8售后处理中
+    
+    private BigDecimal platformFee; // 平台抽成
+    private BigDecimal companionIncome; // 陪诊员预期收益
+    
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

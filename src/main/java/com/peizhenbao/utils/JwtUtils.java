@@ -27,6 +27,19 @@ public class JwtUtils {
         return Jwts.builder()
                 .subject(userId.toString())
                 .claim("phone", phone)
+                .claim("userType", "USER")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateAdminToken(Long adminId, String username, Long roleId) {
+        return Jwts.builder()
+                .subject(adminId.toString())
+                .claim("username", username)
+                .claim("roleId", roleId)
+                .claim("userType", "ADMIN")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())

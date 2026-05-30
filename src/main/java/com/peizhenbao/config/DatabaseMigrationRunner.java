@@ -143,6 +143,55 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ")");
 
+        // Create RBAC System Tables
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS admin_roles (" +
+                "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                "role_name VARCHAR(50) NOT NULL COMMENT '角色名称', " +
+                "role_code VARCHAR(50) NOT NULL UNIQUE COMMENT '角色编码', " +
+                "description VARCHAR(255), " +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS admin_permissions (" +
+                "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                "permission_name VARCHAR(50) NOT NULL COMMENT '权限名称', " +
+                "permission_code VARCHAR(100) NOT NULL UNIQUE COMMENT '权限编码', " +
+                "type INT DEFAULT 1 COMMENT '1=菜单 2=按钮', " +
+                "parent_id BIGINT DEFAULT 0, " +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS admin_role_permissions (" +
+                "role_id BIGINT NOT NULL, " +
+                "permission_id BIGINT NOT NULL, " +
+                "PRIMARY KEY (role_id, permission_id)" +
+                ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS admins (" +
+                "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                "username VARCHAR(50) NOT NULL UNIQUE, " +
+                "password VARCHAR(100) NOT NULL, " +
+                "role_id BIGINT, " +
+                "status INT DEFAULT 1 COMMENT '0=禁用 1=启用', " +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
+                ")");
+
+        // Initialize Super Admin if not exists
+        try {
+            Long adminCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM admins WHERE username = 'admin'", Long.class);
+            if (adminCount != null && adminCount == 0) {
+                // Ensure Super Admin Role exists
+                jdbcTemplate.execute("INSERT IGNORE INTO admin_roles (id, role_name, role_code, description) VALUES (1, '超级管理员', 'SUPER_ADMIN', '系统最高权限管理员')");
+                // Insert default admin with password '123456' encoded with BCrypt
+                // $2a$10$wO3nEiswTpsd38BIfyF4xOom5xP6Z5Y2i8P23Q6w92Z8x97g83gOW is 123456
+                jdbcTemplate.execute("INSERT INTO admins (username, password, role_id, status) VALUES ('admin', '$2a$10$wO3nEiswTpsd38BIfyF4xOom5xP6Z5Y2i8P23Q6w92Z8x97g83gOW', 1, 1)");
+                log.info("Successfully initialized default super admin account (admin / 123456).");
+            }
+        } catch (Exception e) {
+            log.error("Failed to initialize super admin account.", e);
+        }
+
         // High concurrency architecture and redundancy updates
         try {
             // Companion commission rate

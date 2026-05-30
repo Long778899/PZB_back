@@ -23,4 +23,8 @@ public class Department implements Serializable {
     private Long facultyId;
     private String facultyName;
     private String url;
+    
+    // Original system fields that were missing
+    private Integer status;
+    private java.time.LocalDateTime createdAt;
 }

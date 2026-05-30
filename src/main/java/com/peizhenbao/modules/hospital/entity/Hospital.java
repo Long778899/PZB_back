@@ -32,4 +32,10 @@ public class Hospital implements Serializable {
     private LocalDateTime scrapedAt;
     private Integer departmentCount;
     private Integer doctorCount;
+    
+    // Original system fields that were missing
+    private String levelName;
+    private String image;
+    private Integer status;
+    private LocalDateTime createdAt;
 }

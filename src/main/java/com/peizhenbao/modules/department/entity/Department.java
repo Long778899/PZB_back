@@ -6,10 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
-@TableName("departments")
+@TableName("department")
 public class Department implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +16,11 @@ public class Department implements Serializable {
     private Long id;
     private Long hospitalId;
     private String name;
-    private String description;
-    private Integer status; // 0下线 1上线
-    private LocalDateTime createdAt;
+    private String category;
+    private String intro;
+    private String introShort;
+    private Integer totalDoctorCnt;
+    private Long facultyId;
+    private String facultyName;
+    private String url;
 }

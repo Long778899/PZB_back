@@ -8,9 +8,9 @@ spring:
   # DataSource Configuration
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/peizhenbao?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://localhost:33061/hospital_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: hospital_db
+    password: 9r|IOyv2wU
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20

@@ -83,6 +83,16 @@ public class ConsoleDoctorController {
         return Result.success();
     }
 
+    @Operation(summary = "修改医生", description = "修改指定的医生基础信息")
+    @PutMapping
+    public Result<?> update(@RequestBody Doctor doctor) {
+        if (doctor.getId() == null) {
+            return Result.error(400, "医生ID不能为空");
+        }
+        doctorService.updateById(doctor);
+        return Result.success();
+    }
+
     @Operation(summary = "批量新增医生（上传导入模拟）", description = "批量插入医生数据，建议分批提交（如每次500条）以防止内存溢出")
     @PostMapping("/batch")
     public Result<?> addBatch(@RequestBody List<Doctor> doctors) {

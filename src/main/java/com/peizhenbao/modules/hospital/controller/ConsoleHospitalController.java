@@ -74,4 +74,21 @@ public class ConsoleHospitalController {
         hospitalMapper.insert(hospital);
         return Result.success();
     }
+
+    @Operation(summary = "修改医院", description = "后台管理员更新医院信息")
+    @PutMapping
+    public Result<?> updateHospital(@RequestBody Hospital hospital) {
+        if (hospital.getId() == null) {
+            return Result.error(400, "医院ID不能为空");
+        }
+        hospitalMapper.updateById(hospital);
+        return Result.success();
+    }
+
+    @Operation(summary = "删除医院", description = "根据医院ID删除指定医院")
+    @DeleteMapping("/{id}")
+    public Result<?> deleteHospital(@PathVariable Long id) {
+        hospitalMapper.deleteById(id);
+        return Result.success();
+    }
 }

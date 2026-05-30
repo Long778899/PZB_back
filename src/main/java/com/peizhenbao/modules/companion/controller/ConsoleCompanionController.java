@@ -38,4 +38,43 @@ public class ConsoleCompanionController {
         companionMapper.insert(companion);
         return Result.success();
     }
+
+    @Operation(summary = "分页查询陪诊员列表", description = "后台按名字、电话等查询陪诊员")
+    @GetMapping
+    public Result<com.baomidou.mybatisplus.extension.plugins.pagination.Page<Companion>> list(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String phone,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        com.baomidou.mybatisplus.extension.plugins.pagination.Page<Companion> pageParam = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(page, size);
+        com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Companion> wrapper = new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<>();
+        
+        if (org.springframework.util.StringUtils.hasText(name)) {
+            wrapper.like(Companion::getName, name);
+        }
+        if (org.springframework.util.StringUtils.hasText(phone)) {
+            wrapper.like(Companion::getPhone, phone);
+        }
+        wrapper.orderByDesc(Companion::getCreatedAt);
+        
+        return Result.success(companionMapper.selectPage(pageParam, wrapper));
+    }
+
+    @Operation(summary = "修改陪诊员信息", description = "后台更新陪诊员基础资料")
+    @PutMapping
+    public Result<?> updateCompanion(@RequestBody Companion companion) {
+        if (companion.getId() == null) {
+            return Result.error(400, "陪诊员ID不能为空");
+        }
+        companionMapper.updateById(companion);
+        return Result.success();
+    }
+
+    @Operation(summary = "删除陪诊员", description = "根据ID删除指定陪诊员")
+    @DeleteMapping("/{id}")
+    public Result<?> deleteCompanion(@PathVariable Long id) {
+        companionMapper.deleteById(id);
+        return Result.success();
+    }
 }

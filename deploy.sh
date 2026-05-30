@@ -61,7 +61,7 @@ nohup java -jar "$JAR_NAME" > "$LOG_FILE" 2>&1 &
 NEW_PID=$!
 log_info "项目启动成功！新的进程 PID 为: $NEW_PID"
 
-# 5. 提示查看日志
-log_info "========== 部署流程结束 =========="
-log_info "您可以随时使用以下命令查看应用的实时运行日志："
-echo -e "\033[36m    tail -f $LOG_FILE \033[0m\n"
+# 5. 自动实时查看日志
+log_info "========== 部署流程结束，正在打开实时日志 =========="
+log_info "按 Ctrl+C 可退出日志查看（项目会继续在后台运行）"
+tail -f "$LOG_FILE"

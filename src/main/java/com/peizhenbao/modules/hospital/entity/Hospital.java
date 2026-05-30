@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 @Data
-@TableName("hospital")
+@TableName("hospitals")
 public class Hospital implements Serializable {
     private static final long serialVersionUID = 1L;
     

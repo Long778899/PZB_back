@@ -8,7 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName("department")
+@TableName("departments")
 public class Department implements Serializable {
     private static final long serialVersionUID = 1L;
 

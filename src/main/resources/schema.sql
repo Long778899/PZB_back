@@ -2,6 +2,10 @@
 CREATE TABLE IF NOT EXISTS `users` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `phone` VARCHAR(20) UNIQUE COMMENT '手机号',
+    `username` VARCHAR(50) UNIQUE COMMENT '用户名',
+    `email` VARCHAR(100) UNIQUE COMMENT '邮箱',
+    `wechat_openid` VARCHAR(100) UNIQUE COMMENT '微信OpenID',
+    `alipay_user_id` VARCHAR(100) UNIQUE COMMENT '支付宝用户ID',
     `password` VARCHAR(255) COMMENT '密码',
     `nickname` VARCHAR(50) COMMENT '昵称',
     `avatar` VARCHAR(255) COMMENT '头像',

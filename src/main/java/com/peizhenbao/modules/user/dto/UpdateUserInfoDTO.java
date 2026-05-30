@@ -9,7 +9,13 @@ import lombok.Data;
 public class UpdateUserInfoDTO {
     
     @NotBlank(message = "昵称不能为空")
-    @Schema(description = "用户昵称", example = "陪诊小能手")
+    @Schema(description = "用户名", example = "john_doe")
+    private String username;
+
+    @Schema(description = "邮箱", example = "john@example.com")
+    private String email;
+
+    @Schema(description = "昵称", example = "张三")
     private String nickname;
     
     @Schema(description = "用户头像URL", example = "https://example.com/avatar.jpg")

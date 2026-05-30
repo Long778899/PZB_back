@@ -26,6 +26,17 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
             log.debug("Failed to drop singular tables: {}", e.getMessage());
         }
 
+        // Migrate user table
+        String[] userCols = {"username", "email", "wechat_openid", "alipay_user_id"};
+        for (String col : userCols) {
+            try {
+                jdbcTemplate.execute("ALTER TABLE users ADD COLUMN " + col + " VARCHAR(100) UNIQUE");
+                log.info("Successfully added '{}' column to users table.", col);
+            } catch (Exception e) {
+                log.debug("Column '{}' might already exist or could not be added", col);
+            }
+        }
+
         try {
             jdbcTemplate.execute("ALTER TABLE hospitals ADD COLUMN phone VARCHAR(50)");
             log.info("Successfully added 'phone' column to hospitals table.");

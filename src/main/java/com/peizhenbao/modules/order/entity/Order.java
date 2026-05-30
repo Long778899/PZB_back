@@ -20,6 +20,15 @@ public class Order {
     private Long hospitalId;
     private Long departmentId;
     private Long companionId;
+    
+    // 高并发架构反范式冗余字段
+    private Integer dispatchType; // 1=抢单 2=指定派单
+    private String patientName;
+    private String patientPhone;
+    private String hospitalName;
+    private String departmentName;
+    private String companionName;
+    
     private LocalDate appointmentDate;
     private String appointmentTime;
     private String serviceContent;

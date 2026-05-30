@@ -143,6 +143,36 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ")");
 
+        // High concurrency architecture and redundancy updates
+        try {
+            // Companion commission rate
+            jdbcTemplate.execute("ALTER TABLE companions ADD COLUMN commission_rate DECIMAL(3,2) DEFAULT 0.80");
+            // Companion wallet optimistic lock
+            jdbcTemplate.execute("ALTER TABLE companion_wallets ADD COLUMN version INT DEFAULT 0");
+            
+            // Order redundancies
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN dispatch_type INT DEFAULT 1 COMMENT '1=抢单 2=指定'");
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN patient_name VARCHAR(50)");
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN patient_phone VARCHAR(20)");
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN hospital_name VARCHAR(100)");
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN department_name VARCHAR(100)");
+            jdbcTemplate.execute("ALTER TABLE orders ADD COLUMN companion_name VARCHAR(50)");
+            
+            log.info("Successfully added high-concurrency redundancy fields.");
+        } catch (Exception e) {
+            log.debug("Redundancy fields might already exist.");
+        }
+
+        // Add indexes for high concurrency reads
+        try {
+            jdbcTemplate.execute("CREATE INDEX idx_user_status_time ON orders(user_id, order_status, created_at)");
+            jdbcTemplate.execute("CREATE INDEX idx_companion_status_time ON orders(companion_id, order_status, created_at)");
+            jdbcTemplate.execute("CREATE INDEX idx_wallet_companion_time ON wallet_transactions(companion_id, created_at)");
+            log.info("Successfully created high-concurrency indexes.");
+        } catch (Exception e) {
+            log.debug("Indexes might already exist.");
+        }
+
         // Drop singular legacy tables if they exist
         String[] legacyTables = {"department", "doctor", "hospital"};
     }

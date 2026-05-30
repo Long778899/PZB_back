@@ -28,5 +28,6 @@ public class Companion {
     private Integer isVeteran; // 0否 1是
     private Integer hasNursingExperience; // 0无 1有
     private String selfDescription;
+    private BigDecimal commissionRate; // 抽成比例，如 0.80
     private LocalDateTime createdAt;
 }

@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS `patients` (
     INDEX `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='就诊人表';
 
--- 3. 医院表 hospitals
-CREATE TABLE IF NOT EXISTS `hospitals` (
+-- 3. 医院表 hospital
+CREATE TABLE IF NOT EXISTS `hospital` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `name` VARCHAR(255) NOT NULL COMMENT '医院名称',
     `level_name` VARCHAR(50) COMMENT '医院等级（如三甲）',
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS `hospitals` (
     INDEX `idx_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='医院表';
 
--- 4. 科室表 departments
-CREATE TABLE IF NOT EXISTS `departments` (
+-- 4. 科室表 department
+CREATE TABLE IF NOT EXISTS `department` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `hospital_id` BIGINT NOT NULL COMMENT '所属医院ID',
     `name` VARCHAR(100) NOT NULL COMMENT '科室名称',
@@ -59,7 +59,28 @@ CREATE TABLE IF NOT EXISTS `departments` (
     INDEX `idx_hospital_id` (`hospital_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='科室表';
 
--- 5. 陪诊员表 companions
+-- 5. 医生表 doctor
+CREATE TABLE IF NOT EXISTS `doctor` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
+    `hospital_id` BIGINT NOT NULL COMMENT '医院ID',
+    `department_id` BIGINT NOT NULL COMMENT '科室ID',
+    `name` VARCHAR(50) NOT NULL COMMENT '医生姓名',
+    `grade` VARCHAR(50) COMMENT '级别',
+    `educate_grade` VARCHAR(50) COMMENT '教育程度',
+    `title` VARCHAR(50) COMMENT '头衔',
+    `social_position` VARCHAR(100) COMMENT '社会职务',
+    `faculty_name` VARCHAR(50) COMMENT '科室名称',
+    `professional_direction` VARCHAR(255) COMMENT '专业方向',
+    `specialize` TEXT COMMENT '专长',
+    `intro_detail` TEXT COMMENT '详细介绍',
+    `head_image` VARCHAR(255) COMMENT '头像',
+    `comment_rank` DECIMAL(3,2) DEFAULT 5.00 COMMENT '评分',
+    `total_patients` INT DEFAULT 0 COMMENT '总就诊数',
+    `url` VARCHAR(255) COMMENT '链接',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='医生表';
+
+-- 6. 陪诊员表 companions
 CREATE TABLE IF NOT EXISTS `companions` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `name` VARCHAR(50) NOT NULL COMMENT '姓名',
@@ -75,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `companions` (
     INDEX `idx_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='陪诊员表';
 
--- 6. 订单表 orders
+-- 7. 订单表 orders
 CREATE TABLE IF NOT EXISTS `orders` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `order_no` VARCHAR(50) UNIQUE NOT NULL COMMENT '订单编号',
@@ -98,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
     INDEX `idx_order_status` (`order_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';
 
--- 7. 支付记录表 payments
+-- 8. 支付记录表 payments
 CREATE TABLE IF NOT EXISTS `payments` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `order_id` BIGINT NOT NULL COMMENT '订单ID',
@@ -111,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
     INDEX `idx_order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付记录表';
 
--- 8. 钱包流水表 wallet_logs
+-- 9. 钱包流水表 wallet_logs
 CREATE TABLE IF NOT EXISTS `wallet_logs` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
@@ -123,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `wallet_logs` (
     INDEX `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='钱包流水表';
 
--- 9. 退款表 refunds
+-- 10. 退款表 refunds
 CREATE TABLE IF NOT EXISTS `refunds` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `order_id` BIGINT NOT NULL COMMENT '订单ID',
@@ -136,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `refunds` (
     INDEX `idx_order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退款表';
 
--- 10. 消息表 messages
+-- 11. 消息表 messages
 CREATE TABLE IF NOT EXISTS `messages` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `user_id` BIGINT NOT NULL COMMENT '接收用户ID',

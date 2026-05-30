@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:33061/hospital_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     username: hospital_db
-    password: "9r|lOyv2wU"
+    password: "jON5a2@QS0!"
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20

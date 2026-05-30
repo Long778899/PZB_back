@@ -17,6 +17,15 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         log.info("Checking and applying database schema migrations...");
+        
+        // Clean up empty singular tables created by old schema.sql
+        try {
+            jdbcTemplate.execute("DROP TABLE IF EXISTS department, doctor, hospital");
+            log.info("Successfully cleaned up empty singular tables.");
+        } catch (Exception e) {
+            log.debug("Failed to drop singular tables: {}", e.getMessage());
+        }
+
         try {
             jdbcTemplate.execute("ALTER TABLE hospitals ADD COLUMN phone VARCHAR(50)");
             log.info("Successfully added 'phone' column to hospitals table.");

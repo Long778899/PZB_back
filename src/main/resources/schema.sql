@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS `patients` (
     INDEX `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='就诊人表';
 
--- 3. 医院表 hospital
-CREATE TABLE IF NOT EXISTS `hospital` (
+-- 3. 医院表 hospitals
+CREATE TABLE IF NOT EXISTS `hospitals` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `name` VARCHAR(255) NOT NULL COMMENT '医院名称',
     `level_name` VARCHAR(50) COMMENT '医院等级（如三甲）',
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS `hospital` (
     INDEX `idx_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='医院表';
 
--- 4. 科室表 department
-CREATE TABLE IF NOT EXISTS `department` (
+-- 4. 科室表 departments
+CREATE TABLE IF NOT EXISTS `departments` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `hospital_id` BIGINT NOT NULL COMMENT '所属医院ID',
     `name` VARCHAR(100) NOT NULL COMMENT '科室名称',
@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `department` (
     INDEX `idx_hospital_id` (`hospital_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='科室表';
 
--- 5. 医生表 doctor
-CREATE TABLE IF NOT EXISTS `doctor` (
+-- 5. 医生表 doctors
+CREATE TABLE IF NOT EXISTS `doctors` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `hospital_id` BIGINT NOT NULL COMMENT '医院ID',
     `department_id` BIGINT NOT NULL COMMENT '科室ID',
